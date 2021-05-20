@@ -1,0 +1,160 @@
+<!DOCTYPE HTML>
+<HTML lang='ko'>
+  <HEAD>
+
+    <meta charset="utf-8"/>
+    <title>피하기 게임</title>
+    <link rel = "stylesheet" href="char.css"/>
+    <canvas id="myCanvas" width="600" height= "600"></canvas>
+    <script tyep="text/javascript">
+      var canvas = document.getElementById("myCanvas");
+      var context = canvas.getContext("2d");
+
+      //배경 & 맵 변수
+      var backimg = new Image();
+      backimg.src = "image/background.png";
+      var map = new Image();
+      map.src = "image/mapimg.png";
+
+      //user 변수
+      var user = new Image();
+      user.src = "image/user.png";
+      var firstpointx = 240;
+      var firstpointy = 450;
+      var userx = firstpointx;
+      var usery = firstpointy;
+      var movedistance = 100;
+      var leftkey = false;    //왼쪽키눌림
+      var rightkey = false;   //오른쪽키눌림
+      var upkey = false;      //위키눌림
+      var downkey = false;    //아래키눌림
+      var keypress = false;   //공격키
+
+      //laser 변수
+      var warningbar = new Image();
+      warningbar.src = "image/warning.png";
+      var laser = new Image();
+      laser.src = "image/laser.png";
+
+      var imgarray = ["image/warning.png",
+                      "image/laser.png"];
+      var imgs = new Array();
+
+
+      var laserpositionx;
+      var laserpositiony;
+      var laserpointx=0;
+      var laserpointy=0;
+
+
+      function drawbackmap(){ //배경,맵,유저를 그리는 함
+        context.drawImage(backimg,0,0,600,600); //베경을 그린다
+        context.drawImage(map,100,200,400,400); //맵을 그린다
+        drawUser();
+      }
+
+      function drawUser(){  //입력받은 방향키에 따라 user의 움직임을 그립니다.
+        if (leftkey == true) {
+              if (userx > 141) {
+                  userx -= movedistance;
+              }
+          }
+          else if (rightkey == true) {
+              if (userx < 439) {
+                  userx += movedistance;
+              }
+          }
+          if (upkey == true) {
+              if (usery > 251) {
+                  usery -= movedistance;
+              }
+          }
+          else if (downkey == true) {
+              if (usery < 549) {
+                  usery += movedistance;
+              }
+          }
+          context.drawImage(user, userx, usery, 20, 20);
+      }
+
+
+
+      function Laser(){
+          makeLaserwarning();
+          setTimeout(drawLaser(),500);
+
+      }
+
+      function makeLaser_warning(){ //레이저가 나오기 전에 경고합니다.
+        laserpointx = Math.floor(Math.random()*4);  //0부터 3까지의 무작위 정수를 뽑습니다. (레이저의 x위치를 나타냅니다.)
+        laserpointy = Math.floor(Math.random()*4);  //0부터 3까지의 무작위 정수를 뽑습니다. (레이저의 y위치를 나타냅니다.)
+        laserpositionx = 100*laserpointx;
+        laserpositiony = 100*laserpointy;
+        context.drawImage(warningbar,50,200+laserpositiony);
+
+      }
+
+      function drawLaser(){
+
+      }
+
+      function checkuserdead(){
+
+      }
+
+      /*키누르기*/
+  document.addEventListener("keydown", onkey_press, false);
+  document.addEventListener("keyup", onkey_up, false);
+    function onkey_press() {      //키눌렀을때
+        if (event.keyCode == 37) {    //왼쪽이동
+            leftkey = true;
+        }
+        else if (event.keyCode == 39) {    //오른쪽이동
+            rightkey = true;
+        }
+        else if (event.keyCode == 38) {    //위쪽이동
+            upkey = true;
+        }
+        else if (event.keyCode == 40) {    //아래쪽이동
+            downkey = true;
+        }
+
+        if (event.keyCode == 90) {          //z키 공격
+            keypress = true;
+        }
+    }
+    function onkey_up() {      //키땠을때
+        if (event.keyCode == 37) {    //x이동
+            leftkey = false;
+        }
+        else if (event.keyCode == 39) {    //x이동
+            rightkey = false;
+        }
+        if (event.keyCode == 38) {    //y이동
+            upkey = false;
+        }
+        else if (event.keyCode == 40) {    //y이동
+            downkey = false;
+        }
+
+        if (event.keyCode == 90) {
+            keypress = false;
+        }
+    }
+
+var intervalId;
+
+    function start(){
+      intervalId = setInterval(function () {
+        drawbackmap();
+      }, 100);
+    }
+
+    </script>
+  </HEAD>
+  <BODY onload="init()">
+    <div id="but">
+      <input type="button" value="start" id="start" onclick="start()" />
+    </div>
+  </BODY>
+  </HTML>
